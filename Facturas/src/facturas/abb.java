@@ -1,24 +1,21 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package facturas;
 
 /**
  *
- * @author Brian
+ * @author Brian Rivera y Rudy Sanchez
  */
+
 public class abb {
     private class nodoArbol {
         private abb hd;
         private abb hi;
-        private int dato;
+        private Factura dato;
  
         private void nodoArbol(){
             hd = null;
             hi = null;
-            dato = 0;
+            dato = null;
         }
     }
  
@@ -32,7 +29,7 @@ public class abb {
         return (raiz == null);
     }
  
-    public void insertar(int a){
+    public void insertar(Factura a){
         if (esVacio()) {
             nodoArbol nuevo = new nodoArbol();
             nuevo.dato = a;
@@ -41,65 +38,48 @@ public class abb {
             raiz = nuevo;
         }
         else {
-            if (a > raiz.dato) {
+            if (a.id > raiz.dato.id) {
                 (raiz.hd).insertar(a);
             }
-            if (a < raiz.dato){
+            if (a.id < raiz.dato.id){
                 (raiz.hi).insertar(a);
             }
         }
     }
  
-    public void preOrder(){
+
+    public void recorrer(){
         if (!esVacio()) {
-            System.out.print( raiz.dato + ", "  );
-            raiz.hi.preOrder();
-            raiz.hd.preOrder();
+            raiz.hi.recorrer();
+            raiz.dato.imprimir();
+            raiz.hd.recorrer();
         }
     }
  
-    public void inOrder(){
+    public Factura buscar(int a){
         if (!esVacio()) {
-            raiz.hi.inOrder();
-            System.out.print( raiz.dato + ", "  );
-            raiz.hd.inOrder();
-        }
-    }
- 
-    public void posOrder(){
-        if (!esVacio()) {
-            raiz.hd.posOrder();
-            raiz.hi.posOrder();
-            System.out.print( raiz.dato + ", "  );
- 
-        }
-    }
- 
-    public abb buscar(int a){
-        abb arbolito = null;
-        if (!esVacio()) {
-            if (a == raiz.dato) {
-            return this;
+            if (a == raiz.dato.id) {
+            return this.raiz.dato;
             }
             else {
-                if (a < raiz.dato) {
-                    arbolito = raiz.hi.buscar(a);
+                if (a < raiz.dato.id) {
+                   return(raiz.hi.buscar(a));
                 }
                 else {
-                    arbolito = raiz.hd.buscar(a);
+                    return(raiz.hd.buscar(a));
                 }
             }
         }
-        return arbolito;
+        return null;
     }
  
     public boolean existe(int a){
     if (!esVacio()) {
-            if (a == raiz.dato) {
+            if (a == raiz.dato.id) {
             return true;
             }
             else {
-                if (a < raiz.dato) {
+                if (a < raiz.dato.id) {
                     raiz.hi.existe(a);
                 }
                 else {
@@ -110,70 +90,4 @@ public class abb {
         return false;
     }
  
-    public int cantidad(){
-        if (esVacio()) {
-            return 0;
-        }
-        else {
-            return (1 + raiz.hd.cantidad() + raiz.hi.cantidad());
-        }
-    }
- 
-    public int altura() {
-        if (esVacio()) {
-            return 0;
-        }
-        else {
-            return (1 + Math.max(((raiz.hi).altura()), ((raiz.hd).altura())));
-        }
-    }
- 
-    public int buscarMin() {
-        abb arbolActual = this;
-        while( !arbolActual.raiz.hi.esVacio() ) {
-            arbolActual = arbolActual.raiz.hi;
-        }
-        int devuelvo= arbolActual.raiz.dato;
-        arbolActual.raiz=null;
-        return devuelvo;
-    }
- 
-    public int buscarMan() {
-        abb arbolActual = this;
-        while( !arbolActual.raiz.hd.esVacio() ) {
-            arbolActual = arbolActual.raiz.hd;
-        }
-        int devuelvo= arbolActual.raiz.dato;
-            arbolActual.raiz=null;
-        return devuelvo;
-    }
- 
-    public boolean esHoja() {
-        boolean hoja = false;
-        if( (raiz.hi).esVacio() && (raiz.hd).esVacio() ) {
-            hoja = true;
-        }
-        return hoja;
-    }
- 
-    public void eliminar(int a) {
-        abb paraEliminar = buscar(a);
-        if (!paraEliminar.esVacio()) {
-            if (paraEliminar.esHoja()) {
-                paraEliminar.raiz = null;
-            }
-            else {
-                if (!paraEliminar.raiz.hi.esVacio() && !paraEliminar.raiz.hd.esVacio()) {
-                    paraEliminar.raiz.dato = paraEliminar.raiz.hd.buscarMin();
-                }
-                else {
-                    if (paraEliminar.raiz.hi.esVacio()) {
-                        paraEliminar.raiz = paraEliminar.raiz.hd.raiz;
-                    }else{
-                        paraEliminar.raiz = paraEliminar.raiz.hi.raiz;
-                    }
-                }
-            }
-        }
-    }
 }
